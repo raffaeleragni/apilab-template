@@ -1,0 +1,7 @@
+apiVersion: v2
+name: app
+description: app microservice
+type: application
+
+appVersion: 0.0.1
+version: 0.0.1.1
