@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Chart.Name }}-api-migration-{{ 3 | randAlpha | lower }}
+  labels:
+    {{- include "labels" . | nindent 4 }}
+    app: {{ .Chart.Name }}
+    type: api
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade" # Run migrations before chart upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded  # Delete job after migrations ran
+spec:
+  template:
+    metadata:
+      name: {{ .Chart.Name }}-api
+      labels:
+        {{- include "labels" . | nindent 8 }}
+    spec:
+      activeDeadlineSeconds: 600
+      restartPolicy: OnFailure # https://github.com/kubernetes/kubernetes/issues/20255#issuecomment-310540940
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: {{ .Chart.Name }}-api-migration-{{ 3 | randAlpha | lower }}
+          image: "{{ .Values.api.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            {{- toYaml .Values.api.environment | nindent 12 }}
+            - name: API_ENABLE_ENDPOINTS
+              value: "false"
+            - name: API_ENABLE_CONSUMERS
+              value: "false"
+            - name: API_ENABLE_SCHEDULED
+              value: "false"
+            - name: API_ENABLE_MIGRATION
+              value: "true"
+            - name: API_QUIT_AFTER_MIGRATION
+              value: "true"

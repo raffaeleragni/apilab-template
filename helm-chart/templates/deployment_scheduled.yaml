@@ -2,14 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 # this is the metadata of the deployment, not the pod
 metadata:
-  name: {{ .Chart.Name }}-api
+  name: {{ .Chart.Name }}-scheduled
   labels:
     {{- include "labels" . | nindent 4 }}
     app: {{ .Chart.Name }}
-    type: api
+    type: scheduled
 spec:
   # this is the options for the deployment
-  replicas: {{ .Values.api.replicas }}
+  replicas: {{ .Values.scheduled.replicas }}
   revisionHistoryLimit: 0
   progressDeadlineSeconds: 300
   minReadySeconds: 10
@@ -22,14 +22,14 @@ spec:
     matchLabels:
       {{- include "selectorLabels" . | nindent 6 }}
       app: {{ .Chart.Name }}
-      type: api
+      type: scheduled
   # from the template is the actual definition of one pod
   template:
     metadata:
       labels:
         {{- include "selectorLabels" . | nindent 8 }}
         app: {{ .Chart.Name }}
-        type: api
+        type: scheduled
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "7080"
@@ -39,8 +39,8 @@ spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: {{ .Chart.Name }}-api
-          image: "{{ .Values.api.image.repository }}:{{ .Chart.AppVersion }}"
+        - name: {{ .Chart.Name }}-scheduled
+          image: "{{ .Values.scheduled.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -55,15 +55,15 @@ spec:
               path: /status/health
               port: http
           resources:
-            {{- toYaml .Values.api.resources | nindent 12 }}
+            {{- toYaml .Values.scheduled.resources | nindent 12 }}
           env:
-            {{- toYaml .Values.api.environment | nindent 12 }}
+            {{- toYaml .Values.scheduled.environment | nindent 12 }}
             - name: API_ENABLE_ENDPOINTS
-              value: "true"
+              value: "false"
             - name: API_ENABLE_CONSUMERS
               value: "false"
             - name: API_ENABLE_SCHEDULED
-              value: "false"
+              value: "true"
             - name: API_ENABLE_MIGRATION
               value: "false"
             - name: API_QUIT_AFTER_MIGRATION

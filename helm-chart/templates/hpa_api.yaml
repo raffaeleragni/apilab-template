@@ -4,6 +4,8 @@ metadata:
   name: {{ .Chart.Name }}-api
   labels:
     {{- include "labels" . | nindent 4 }}
+    app: {{ .Chart.Name }}
+    type: api
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
