@@ -15,19 +15,19 @@
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
     <sonar.jacoco.reportPath>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPath>
-    
+
     <version.immutables>2.8.1</version.immutables>
     <version.dagger>2.24</version.dagger>
-    
+
     <version.apilab>1.3</version.apilab>
     <version.junit>5.6.0</version.junit>
     <version.mockito>3.2.4</version.mockito>
     <version.hamcrest>2.1</version.hamcrest>
     <version.jsonassert>1.5.0</version.jsonassert>
     <version.jacoco>0.8.5</version.jacoco>
-    
+
   </properties>
-  
+
   <dependencies>
 
     <!-- main api lab -->
@@ -50,8 +50,8 @@
       <version>${version.dagger}</version>
       <optional>true</optional>
     </dependency>
-    
-    
+
+
     <!-- T E S T   D E P E N D E N C I E S -->
 
     <!-- junit -->
@@ -86,11 +86,98 @@
       <version>${version.jsonassert}</version>
       <scope>test</scope>
     </dependency>
-    
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>4.2.0</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
-  
+
   <build>
     <plugins>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          <environmentVariables>
+            <API_ENABLE_ENDPOINTS>true</API_ENABLE_ENDPOINTS>
+            <API_ENABLE_CONSUMERS>true</API_ENABLE_CONSUMERS>
+            <API_ENABLE_SCHEDULED>true</API_ENABLE_SCHEDULED>
+            <API_ENABLE_MIGRATION>true</API_ENABLE_MIGRATION>
+            <API_QUIT_AFTER_MIGRATION>>false</API_QUIT_AFTER_MIGRATION>
+            <API_JWT_SECRET>test</API_JWT_SECRET>
+            <API_REDIS_URL>redis://localhost</API_REDIS_URL>
+            <API_DATABASE_URL>jdbc:postgresql://localhost/postgres</API_DATABASE_URL>
+            <API_DATABASE_USERNAME>postgres</API_DATABASE_USERNAME>
+            <API_DATABASE_PASSWORD>postgres</API_DATABASE_PASSWORD>
+            <API_DATABASE_MAXPOOLSZE>5</API_DATABASE_MAXPOOLSZE>
+            <API_RABBITMQ_USERNAME>guest</API_RABBITMQ_USERNAME>
+            <API_RABBITMQ_PASSWORD>guest</API_RABBITMQ_PASSWORD>
+            <API_RABBITMQ_HOST>localhost</API_RABBITMQ_HOST>
+            <API_RABBITMQ_PORT>5672</API_RABBITMQ_PORT>
+            <JAVALIN_HTTP2_PORT>17367</JAVALIN_HTTP2_PORT>
+            <JAVALIN_HTTPS2_PORT>19272</JAVALIN_HTTPS2_PORT>
+            <JAVALIN_PROMETHEUS_PORT>18392</JAVALIN_PROMETHEUS_PORT>
+          </environmentVariables>
+          <includes>
+            <include>**/*Test.java</include>
+            <include>**/*IT.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addClasspath>true</addClasspath>
+              <mainClass>base.Main</mainClass>
+            </manifest>
+            <manifestEntries>
+              <Class-Path>lib</Class-Path>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>4.0.0</version>
+        <executions>
+          <execution>
+            <id>check</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <!-- code coverage -->
       <plugin>
         <groupId>org.jacoco</groupId>
@@ -114,12 +201,12 @@
       </plugin>
     </plugins>
   </build>
-  
+
   <repositories>
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
     </repository>
   </repositories>
-  
+
 </project>
