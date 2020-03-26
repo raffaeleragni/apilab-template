@@ -8,6 +8,8 @@ import javax.inject.Inject;
 
 public class GetEndpoint implements Endpoint {
 
+  @Inject MyEventService event;
+  
   @Inject
   public GetEndpoint() {
   }
@@ -23,6 +25,7 @@ public class GetEndpoint implements Endpoint {
   @Override
   public void handle(Context ctx) throws Exception {
     ctx.result("Hello universe.");
+    event.send("HELLO");
   }
   
 }
