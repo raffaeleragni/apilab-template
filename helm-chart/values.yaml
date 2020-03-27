@@ -68,10 +68,6 @@ consumers:
 scheduled:
   image:
     repository: "registry/app"
-  scaling:
-    min: 1
-    max: 3
-    threshold: 50
   resources:
     requests:
       cpu: 500m
