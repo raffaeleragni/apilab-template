@@ -4,18 +4,20 @@ import javax.inject.Inject;
 
 public class MyScheduled implements Scheduled {
 
+  @Inject MyEventService event;
+  
   @Inject
   public MyScheduled() {
   }
 
   @Override
-  public String cron() {
-    return "* * * * *";
+  public long period() {
+    return 1000;
   }
-
+  
   @Override
   public void run() {
-    System.out.println("ciao");
+    event.send("ciao");
   }
   
 }
