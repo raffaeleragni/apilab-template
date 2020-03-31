@@ -19,7 +19,7 @@
     <version.immutables>2.8.1</version.immutables>
     <version.dagger>2.24</version.dagger>
 
-    <version.apilab>2.0</version.apilab>
+    <version.apilab>2.1</version.apilab>
     <version.junit>5.6.0</version.junit>
     <version.mockito>3.2.4</version.mockito>
     <version.hamcrest>2.1</version.hamcrest>
