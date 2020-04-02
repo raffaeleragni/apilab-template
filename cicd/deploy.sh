@@ -1,6 +1,7 @@
 #!/bin/bash
 DIRNAME=$(dirname $0)
-CHARTPATH=$(realpath --relative-to=${PWD} ${DIRNAME}/../helm-chart )
+CHARTPATH=$(realpath --relative-to=${PWD} ${DIRNAME}/../helm-chart)
+CHARTPATH_FULL=$(realpath ${DIRNAME}/../helm-chart)
 GIT_TAG=$1
 GIT_TAG=${GIT_TAG:-$(git describe --exact-match --tags HEAD)}
 if [ -z "$GIT_TAG" ]; then
@@ -18,4 +19,8 @@ appVersion: ${GIT_TAG}
 version: ${GIT_TAG}.1
 EOF
 
-helm --debug upgrade app ${CHARTPATH}
+docker run --rm \
+  -v $CHARTPATH_FULL:/helm-chart \
+  -v $HOME/.kube:/root/.kube \
+    dtzar/helm-kubectl \
+      helm --debug upgrade cluster-domain-api /helm-chart
