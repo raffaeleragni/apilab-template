@@ -71,7 +71,7 @@ deploy() {
     return
   fi
 
-  cat > ${CHARTPATH}/Chart.yaml <<EOF
+  cat > Chart.yaml <<EOF
 apiVersion: v2
 name: cluster-domain
 description: cluster-domain microservice
