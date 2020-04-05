@@ -18,6 +18,7 @@
 
     <version.immutables>2.8.1</version.immutables>
     <version.dagger>2.24</version.dagger>
+    <version.okhttp>4.4.1</version.okhttp>
 
     <version.apilab>2.2</version.apilab>
     <version.junit>5.6.0</version.junit>
@@ -49,6 +50,11 @@
       <artifactId>dagger-compiler</artifactId>
       <version>${version.dagger}</version>
       <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>${version.okhttp}</version>
     </dependency>
 
 
@@ -84,12 +90,6 @@
       <groupId>org.skyscreamer</groupId>
       <artifactId>jsonassert</artifactId>
       <version>${version.jsonassert}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>4.2.0</version>
       <scope>test</scope>
     </dependency>
 
