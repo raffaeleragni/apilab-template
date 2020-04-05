@@ -13,3 +13,9 @@ services:
   rabbitmq:
     image: rabbitmq:management
     ports: ["5672:5672"]
+  wiremock:
+    image: rodolpheche/wiremock:latest-alpine
+    ports:
+      - "12345:8080"
+    volumes:
+      - ./docs/wiremock:/home/wiremock
