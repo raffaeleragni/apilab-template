@@ -11,7 +11,7 @@
     <maven.compiler.target>12</maven.compiler.target>
     <!-- apilab version -->
     <package.apilab>com.github.raffaeleragni.apilab</package.apilab>
-    <version.apilab>3.1</version.apilab>
+    <version.apilab>0.3.2</version.apilab>
     <!-- dependencies versions -->
     <version.immutables>2.8.1</version.immutables>
     <version.dagger>2.24</version.dagger>
@@ -71,45 +71,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.2.1</version>
-        <inherited>true</inherited>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
-        <inherited>true</inherited>
-        <configuration>
-          <!-- This is necessary for gpg to not try to use the pinentry programs -->
-          <gpgArguments>
-            <arg>--no-tty</arg>
-            <arg>--batch</arg>
-            <arg>--yes</arg>
-            <arg>--pinentry-mode</arg>
-            <arg>loopback</arg>
-          </gpgArguments>
-          <sourcepath>${project.basedir}/src/main/java;${project.basedir}/target/generated-sources/annotations</sourcepath>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>4.0.0</version>
@@ -149,7 +110,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>Main</mainClass>
+              <mainClass>app.Main</mainClass>
             </manifest>
           </archive>
         </configuration>
