@@ -11,7 +11,7 @@
     <maven.compiler.target>12</maven.compiler.target>
     <!-- apilab version -->
     <package.apilab>com.github.raffaeleragni.apilab</package.apilab>
-    <version.apilab>0.3.3</version.apilab>
+    <version.apilab>0.3.4</version.apilab>
     <!-- dependencies versions -->
     <version.immutables>2.8.1</version.immutables>
     <version.dagger>2.24</version.dagger>
@@ -34,7 +34,6 @@
         <version>3.8.1</version>
         <inherited>true</inherited>
         <configuration>
-          <useIncrementalCompilation>false</useIncrementalCompilation>
           <annotationProcessorPaths>
             <path>
               <groupId>com.google.dagger</groupId>
@@ -91,6 +90,7 @@
       <!-- artifact build operations -->
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.2</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -98,8 +98,8 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-
               <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <includeScope>compile</includeScope>
             </configuration>
           </execution>
         </executions>
