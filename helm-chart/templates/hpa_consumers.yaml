@@ -1,0 +1,16 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Chart.Name }}-consumers
+  labels:
+    {{- include "labels" . | nindent 4 }}
+    app: {{ .Chart.Name }}
+    type: consumers
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Chart.Name }}-consumers # same name of the deployment that will be scaled
+  minReplicas: {{ .Values.consumers.scaling.min }}
+  maxReplicas: {{ .Values.consumers.scaling.max }}
+  targetCPUUtilizationPercentage: {{ .Values.consumers.scaling.threshold }}

@@ -1,0 +1,134 @@
+
+api:
+  image:
+    repository: "repo/api-template"
+  scaling:
+    min: 1
+    max: 3
+    threshold: 50
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
+  environment:
+    - name: API_JWT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: app-secrets
+          key: jwt-secret
+    - name: API_REDIS_URL
+      value: "redis://redis-ha"
+    - name: API_RABBITMQ_USERNAME
+      value: guest
+    - name: API_RABBITMQ_PASSWORD
+      value: guest
+    - name: API_RABBITMQ_HOST
+      value: "rabbitmq-ha"
+    - name: API_RABBITMQ_PORT
+      value: "5672"
+    - name: API_DATABASE_URL
+      value: "jdbc:postgresql://app-postgres/app"
+    - name: API_DATABASE_USERNAME
+      value: "app"
+    - name: API_DATABASE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: app-postgresql
+          key: password
+    - name: API_DATABASE_MAXPOOLSZE
+      value: "20"
+    - name: JAVALIN_HTTP2_PORT
+      value: "8080"
+    - name: JAVALIN_HTTPS2_PORT
+      value: "8443"
+
+consumers:
+  image:
+    repository: "repo/api-template"
+  scaling:
+    min: 1
+    max: 3
+    threshold: 50
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
+  environment:
+    - name: API_JWT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: app-secrets
+          key: jwt-secret
+    - name: API_REDIS_URL
+      value: "redis://redis-ha"
+    - name: API_RABBITMQ_USERNAME
+      value: guest
+    - name: API_RABBITMQ_PASSWORD
+      value: guest
+    - name: API_RABBITMQ_HOST
+      value: "rabbitmq-ha"
+    - name: API_RABBITMQ_PORT
+      value: "5672"
+    - name: API_DATABASE_URL
+      value: "jdbc:postgresql://app-postgres/app"
+    - name: API_DATABASE_USERNAME
+      value: "app"
+    - name: API_DATABASE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: app-postgresql
+          key: password
+    - name: API_DATABASE_MAXPOOLSZE
+      value: "20"
+    - name: JAVALIN_HTTP2_PORT
+      value: "8080"
+    - name: JAVALIN_HTTPS2_PORT
+      value: "8443"
+
+scheduled:
+  image:
+    repository: "repo/api-template"
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
+  environment:
+    - name: API_JWT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: app-secrets
+          key: jwt-secret
+    - name: API_REDIS_URL
+      value: "redis://redis-ha"
+    - name: API_RABBITMQ_USERNAME
+      value: guest
+    - name: API_RABBITMQ_PASSWORD
+      value: guest
+    - name: API_RABBITMQ_HOST
+      value: "rabbitmq-ha"
+    - name: API_RABBITMQ_PORT
+      value: "5672"
+    - name: API_DATABASE_URL
+      value: "jdbc:postgresql://app-postgres/app"
+    - name: API_DATABASE_USERNAME
+      value: "app"
+    - name: API_DATABASE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: app-postgresql
+          key: password
+    - name: API_DATABASE_MAXPOOLSZE
+      value: "20"
+    - name: JAVALIN_HTTP2_PORT
+      value: "8080"
+    - name: JAVALIN_HTTPS2_PORT
+      value: "8443"

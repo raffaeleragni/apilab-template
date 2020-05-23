@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+# this is the metadata of the deployment, not the pod
+metadata:
+  name: {{ .Chart.Name }}-scheduled
+  labels:
+    {{- include "labels" . | nindent 4 }}
+    app: {{ .Chart.Name }}
+    type: scheduled
+spec:
+  # scheduled is only a clock so always 1
+  replicas: 1
+  revisionHistoryLimit: 0
+  progressDeadlineSeconds: 300
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: "50%"
+  selector:
+    matchLabels:
+      {{- include "selectorLabels" . | nindent 6 }}
+      app: {{ .Chart.Name }}
+      type: scheduled
+  # from the template is the actual definition of one pod
+  template:
+    metadata:
+      labels:
+        {{- include "selectorLabels" . | nindent 8 }}
+        app: {{ .Chart.Name }}
+        type: scheduled
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "7080"
+        prometheus.io/path: "/"
+    # each one is an actual container inside a pod now
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: {{ .Chart.Name }}-scheduled
+          image: "{{ .Values.scheduled.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /status/version
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /status/health
+              port: http
+          resources:
+            {{- toYaml .Values.scheduled.resources | nindent 12 }}
+          env:
+            {{- toYaml .Values.scheduled.environment | nindent 12 }}
+            - name: API_ENABLE_ENDPOINTS
+              value: "false"
+            - name: API_ENABLE_CONSUMERS
+              value: "false"
+            - name: API_ENABLE_SCHEDULED
+              value: "true"
+            - name: API_ENABLE_MIGRATION
+              value: "false"
+            - name: API_QUIT_AFTER_MIGRATION
+              value: "false"
