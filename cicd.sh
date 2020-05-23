@@ -19,7 +19,7 @@ set -xe
 DIRNAME="$(dirname $0)"
 
 APP_PREFIX=${APP_PREFIX:-"application"}
-SDKMAN_SDK=${SDKMAN_SDK:-"13.0.1.hs-adpt"}
+SDKMAN_SDK=${SDKMAN_SDK:-"14.0.1.hs-adpt"}
 DOCKER_REPO_AND_IMAGE=${DOCKER_REPO_AND_IMAGE:-"unknown"}
 
 GIT_TAG=${GIT_TAG:-$(git describe --exact-match --tags HEAD || true)}
