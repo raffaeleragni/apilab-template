@@ -1,6 +1,6 @@
 package app;
 
-import app.endpoint.GetEndpoint;
+import app.endpoint.SomeGroupedEndpoints;
 import app.scheduled.ScheduledSeconds;
 import app.service.MessageService;
 import com.github.raffaeleragni.apilab.apilab.executors.Scheduled;
@@ -22,33 +22,41 @@ public class AppModule {
   @Provides
   @Singleton
   public Env env() {
+    // Allowing to custom return an Env so that it can be mocked on tests.
     return new Env();
   }
 
   @Provides
   @Singleton
   public RESTInitializer restInitializer() {
-    return ImmutableRESTInitializer.builder().build();
+    // Essential role mapping configuration for authorization.
+    return ImmutableRESTInitializer.builder()
+      .roleMapper(Roles::valueOf)
+      .build();
   }
 
+  @Provides
+  @IntoSet
+  public Endpoint getEndpoint(SomeGroupedEndpoints endpoint) {
+    // A sample endpoint
+    return endpoint;
+  }
+
+  // Remove this if you don't use jdbi/databases.
   @Provides
   @Named("jdbiImmutables")
   public Set<Class<?>> immutableClass() {
     return emptySet();
   }
 
-  @Provides
-  @IntoSet
-  public Endpoint getEndpoint(GetEndpoint endpoint) {
-    return endpoint;
-  }
-
+  // Remove this if you don't use rabbitmq/queues
   @Provides
   @IntoSet
   public QueueService mesageService(MessageService service) {
     return service;
   }
 
+  // Remove this if you don't use scheduler/executors.
   @Provides
   @IntoSet
   public Scheduled scheduledSeconds(ScheduledSeconds scheduled) {

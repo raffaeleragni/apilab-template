@@ -137,7 +137,16 @@
       <version>${version.immutables}</version>
       <optional>true</optional>
     </dependency>
-    <!-- main dependencies -->
+    <!-- main dependencies, remove what you don't use
+
+       apilab-core is required
+       and usually apilab-javalin for having a minimum restful api
+       the rest is optional depending on what is used
+          apilab-jdbi: database
+          apilab-redis: redis client
+          apilab-rabbitmq: queue/messaging/async
+          apilab-executors: periodic executors based on time
+    -->
     <dependency>
       <artifactId>apilab-core</artifactId>
       <groupId>${package.apilab}</groupId>

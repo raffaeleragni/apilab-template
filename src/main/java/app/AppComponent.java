@@ -11,7 +11,7 @@ import javax.inject.Singleton;
 @dagger.Component(modules = {
   // Our own app module providing custom instances
   AppModule.class,
-  // API-LAB modules
+  // API-LAB modules, remove what you don't use.
   ApplicationModule.class,
   RESTModule.class,
   JdbiModule.class,

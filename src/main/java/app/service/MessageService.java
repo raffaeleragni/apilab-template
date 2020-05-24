@@ -5,6 +5,10 @@ import com.github.raffaeleragni.apilab.queues.QueueService;
 import com.rabbitmq.client.ConnectionFactory;
 import javax.inject.Inject;
 
+/**
+ * This is part of the rabbitmq module and the queued async services.
+ * Remove this class if you don't use that module.
+ */
 public class MessageService extends QueueService<String> {
 
   @Inject
